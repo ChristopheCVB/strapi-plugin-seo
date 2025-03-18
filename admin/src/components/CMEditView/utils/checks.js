@@ -2,8 +2,8 @@ import _ from 'lodash';
 
 import { getRichTextCheck } from '../utils';
 
-const getMetaTitleCheckPreview = (modifiedData) => {
-  const metaTitle = _.get(modifiedData, 'seo.metaTitle');
+const getMetaTitleCheckPreview = (seo) => {
+  const metaTitle = _.get(seo, 'metaTitle');
 
   let status = {
     message: '',
@@ -24,8 +24,8 @@ const getMetaTitleCheckPreview = (modifiedData) => {
   return status;
 };
 
-const getMetaDescriptionPreview = (modifiedData) => {
-  const metaDescription = _.get(modifiedData, 'seo.metaDescription');
+const getMetaDescriptionPreview = (seo) => {
+  const metaDescription = _.get(seo, 'metaDescription');
 
   let status = {
     message: '',
@@ -133,8 +133,8 @@ const getKeywordDensityPreview = (keywordsDensity) => {
   return status;
 };
 
-const canonicalUrlPreview = (modifiedData) => {
-  const canonicalUrl = _.get(modifiedData, 'seo.canonicalURL');
+const canonicalUrlPreview = (seo) => {
+  const canonicalUrl = _.get(seo, 'canonicalURL');
   let status = {
     message: '',
     color: 'success',
@@ -175,8 +175,8 @@ const lastUpdatedAtPreview = (modifiedData) => {
   return status;
 };
 
-const metaRobotPreview = (modifiedData) => {
-  const metaRobots = _.get(modifiedData, 'seo.metaRobots');
+const metaRobotPreview = (seo) => {
+  const metaRobots = _.get(seo, 'metaRobots');
   let status = {
     message: '',
     color: 'success',
@@ -190,8 +190,8 @@ const metaRobotPreview = (modifiedData) => {
   return status;
 };
 
-const metaSocialPreview = (modifiedData) => {
-  const metaSocial = _.get(modifiedData, 'seo.metaSocial');
+const metaSocialPreview = (seo) => {
+  const metaSocial = _.get(seo, 'metaSocial');
 
   let status = {
     message: '',
@@ -225,8 +225,8 @@ const metaSocialPreview = (modifiedData) => {
   return status;
 };
 
-const structuredDataPreview = (modifiedData) => {
-  const structuredData = _.get(modifiedData, 'seo.structuredData');
+const structuredDataPreview = (seo) => {
+  const structuredData = _.get(seo, 'structuredData');
   let status = {
     message: '',
     color: 'success',
@@ -240,8 +240,12 @@ const structuredDataPreview = (modifiedData) => {
   return status;
 };
 
-const getAllChecks = (modifiedData, components, contentType) => {
+const getAllChecks = (layout, modifiedData, components, contentType) => {
+  const seoPropName = Object.entries(layout.attributes).find(([, attr]) => attr.type === "component" && attr.component === 'shared.seo')[0];
+  const seo = _.get(modifiedData, seoPropName, null);
+
   const { wordCount, keywordsDensity, emptyAltCount } = getRichTextCheck(
+    seo,
     modifiedData,
     components,
     contentType
@@ -249,13 +253,13 @@ const getAllChecks = (modifiedData, components, contentType) => {
 
   let result = {
     wordCount: getWordCountPreview(wordCount),
-    metaRobots: metaRobotPreview(modifiedData),
-    metaSocial: metaSocialPreview(modifiedData),
-    canonicalUrl: canonicalUrlPreview(modifiedData),
-    metaTitle: getMetaTitleCheckPreview(modifiedData),
+    metaRobots: metaRobotPreview(seo),
+    metaSocial: metaSocialPreview(seo),
+    canonicalUrl: canonicalUrlPreview(seo),
+    metaTitle: getMetaTitleCheckPreview(seo),
     lastUpdatedAt: lastUpdatedAtPreview(modifiedData),
-    structuredData: structuredDataPreview(modifiedData),
-    metaDescription: getMetaDescriptionPreview(modifiedData),
+    structuredData: structuredDataPreview(seo),
+    metaDescription: getMetaDescriptionPreview(seo),
     alternativeText: getAlternativeTextPreview(emptyAltCount),
     keywordsDensity: getKeywordDensityPreview(keywordsDensity),
   };

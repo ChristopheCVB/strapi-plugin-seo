@@ -175,7 +175,7 @@ const getAltCheck = (contentType, modifiedData) => {
   return { intersection, altTexts };
 };
 
-const getRichTextCheck = (modifiedData, components, contentType) => {
+const getRichTextCheck = (seo, modifiedData, components, contentType) => {
   const richTextFields = getRichTextFields(
     contentType,
     components,
@@ -186,7 +186,7 @@ const getRichTextCheck = (modifiedData, components, contentType) => {
   let emptyAltCount = { intersections, richTextAlts: [], altTexts };
   let wordCount = 0;
   let keywords = [];
-  const tmp = _.get(modifiedData, 'seo.keywords', null);
+  const tmp = _.get(seo, 'keywords', null);
   if (tmp) keywords = tmp.split(',');
   keywordsDensity = {};
 

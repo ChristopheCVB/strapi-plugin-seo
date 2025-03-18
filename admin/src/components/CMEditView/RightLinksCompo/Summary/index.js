@@ -40,7 +40,7 @@ const Summary = () => {
   const [isSeoChecksVisible, setIsSeoChecksVisible] = useState(false);
   const [localChecks, setLocalChecks] = useState({});
   const [checks, dispatch] = useReducer(reducer, initialState);
-  const { allLayoutData, modifiedData } = useCMEditViewDataManager();
+  const { allLayoutData, layout, modifiedData } = useCMEditViewDataManager();
 
   const { contentType, components } = allLayoutData;
 
@@ -114,18 +114,21 @@ const Summary = () => {
 
         {isBrowserPreviewVisible && (
           <BrowserPreview
+            layout={layout}
             modifiedData={modifiedData}
             setIsVisible={setIsBrowserPreviewVisible}
           />
         )}
         {isSocialPreviewVisible && (
           <SocialPreview
+            layout={layout}
             modifiedData={modifiedData}
             setIsVisible={setIsSocialPreviewVisible}
           />
         )}
         {isSeoChecksVisible && (
           <SeoChecks
+            layout={layout}
             modifiedData={modifiedData}
             components={components}
             contentType={contentType}
